@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 class ContactServices{
  static List<Contact>? contacts;
+ static List<Contact>? tempContacts;
   //load the contact from phone
   loadConact(VoidCallback aftersuccess)async{
     try{
@@ -13,6 +16,9 @@ class ContactServices{
    if (await Permission.contacts.request().isGranted) {
   // Either the permission was already granted before or the user just granted it.
     contacts = await ContactsService.getContacts();  
+     if(contacts !=null){
+    tempContacts=  contacts?.map((e)=> e ).toList();
+   }
     aftersuccess();
    }
      }
@@ -40,12 +46,9 @@ class ContactServices{
   }
 
   String getAllphone(List<Item>? phones) {
-
- String phoneNumberList="";
- 
+   String phoneNumberList="";
    phoneNumberList=phones!.map((e) => e.value as String).toList(). join(', ').toString();
- 
- return phoneNumberList;
+   return phoneNumberList;
   }
  
 }
